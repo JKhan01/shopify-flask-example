@@ -1,7 +1,28 @@
 <!doctype html>
 <title>Welcome to my Shopify app!</title>
 {% if shop %}
-  <h1>Hello {{ shop }}!</h1>
+  <h1>Hello !</h1>
+  <br>
+  <h4> To add our chatbot into your Shopify site, </h4><br>
+  <h5> Please create a project on <a href="https://app.teedee.io/">TeeDee</a> with 'https://{{ shop }}' as project url.</h5><br>
+  <h5> Create the desired chatbot in that project </h5>
+  <br>
+  <style>
+      input{
+        width: 400px;
+        border-width: 2px;
+      }
+  </style>
+  <div>
+    <form name="script-input" action="/automated_script" method="POST">
+      <!-- <textarea name="script-input" placeholder="Copy your Generated Script on bot creation here " required></textarea> -->
+      <input type="text" name="script-input" placeholder="Copy your Generated Script on bot creation here " required></input>
+      <br>
+      <input type="hidden" value="{{ shop }}" name="shop-name">
+      <br>
+      <button type="submit"> Submit </button>
+    </form>
+  </div>
 {% else %}
   <h1>Hello, World!</h1>
 {% endif %}

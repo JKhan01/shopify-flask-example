@@ -9,6 +9,7 @@ import helpers
 from shopify_client import ShopifyStoreClient
 
 from dotenv import load_dotenv
+import requests
 
 load_dotenv()
 WEBHOOK_APP_UNINSTALL_URL = os.environ.get('WEBHOOK_APP_UNINSTALL_URL')
@@ -32,7 +33,6 @@ def app_launched():
 
     if ACCESS_TOKEN:
         return render_template('welcome.html', shop=shop)
-
     # The NONCE is a single-use random value we send to Shopify so we know the next call from Shopify is valid (see #app_installed)
     #   https://en.wikipedia.org/wiki/Cryptographic_nonce
     NONCE = uuid.uuid4().hex
@@ -90,6 +90,18 @@ def data_removal_request():
     # Clear all personal information you may have stored about the specified shop
     return "OK"
 
+@app.route('/')
+def hello_route():
+    return "Hello World"
+
+@app.route('/automated_script', methods=['POST'])
+def inject_script():
+    shop_link = f"https://{request.form['shop-name']}"
+    script_data = str(request.form['script-input'])+"#"
+    shopify_script = ShopifyStoreClient(shop=request.form['shop-name'], access_token=ACCESS_TOKEN)
+    print (shopify_script.create_script_tag(src=script_data,display_scope="online_store"))
+
+    return "Successfully Injected"
 
 if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
